@@ -1,0 +1,7 @@
+build-debug/
+build-release/
+*.exe
+*.o
+*.info
+*.env
+*.bat
