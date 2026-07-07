@@ -17,6 +17,6 @@ int main() {
     CHECK(sum(-2, 2) == 0);
     CHECK(sum(-2, 3) == 1);
 
-    if (failed == 0) std::cout << "All passesed\n";
+    if (failed == 0) std::cout << "All passed\n";
     return failed;
 }
