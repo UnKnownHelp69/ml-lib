@@ -8,12 +8,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(ML_FLAGS
     -Wall -Wextra -Wshadow -Wconversion -Wsign-conversion
     -Wnull-dereference -Wnon-virtual-dtor
-    $<$<CONFIG:Debug>:-g -O0>
+    $<$<CONFIG:Debug>:-g -O0 -march=native>
     $<$<CONFIG:Release>:-O3 -march=native>
 )
 
-add_library(mllib 
-    src/sum.cpp
+add_library(mllib # add here all tested modules
+    src/matrix.cpp
 )
 target_include_directories(mllib PUBLIC include)
 target_compile_options(mllib PRIVATE ${ML_FLAGS})

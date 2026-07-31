@@ -1,3 +1,3 @@
-add_executable(test_sum test_sum.cpp)
-target_link_libraries(test_sum PRIVATE mllib)
-add_test(NAME test_sum COMMAND test_sum)
+add_executable(test_matrix test_matrix.cpp)
+target_link_libraries(test_matrix PRIVATE mllib)
+add_test(NAME test_matrix COMMAND test_matrix)

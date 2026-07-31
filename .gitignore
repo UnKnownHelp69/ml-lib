@@ -5,3 +5,5 @@ build-release/
 *.info
 *.env
 *.bat
+/objdumps
+*.py
