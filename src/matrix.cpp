@@ -1,5 +1,6 @@
 #include "matrix.hpp"
 
+#include <random>
 #include <omp.h>
 
 Matrix Matrix::operator*(Matrix rightMatrix) {
@@ -21,3 +22,13 @@ Matrix Matrix::operator*(Matrix rightMatrix) {
 
     return newMatrix;
 }
+
+void Matrix::randomize() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<Scalar> dist(0.0, 1.0);
+
+    for (size_t i = 0; i < static_cast<size_t>(rows * columns); ++i) {
+        dataRow[i] = dist(gen);
+    }
+}   
