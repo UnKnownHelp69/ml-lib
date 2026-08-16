@@ -4,42 +4,26 @@
 #include <algorithm>
 #include <utility>
 #include <random>
+#include <stdexcept>
 
+Network::Network(std::vector<int> _sizes) : num_layers(_sizes.size()), sizes(std::move(_sizes)) {
+    if (sizes.empty()) 
+        throw std::invalid_argument("Network must has at least one laywer.");
 
-Network::Network(std::vector<int> _sizes) : sizes(std::move(_sizes)) {
-    // TODO: replace double by scalar from types.hpp
-    num_layers = static_cast<int>(sizes.size());
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<double> dist(0.0, 1.0);
-
-    biases.reserve(static_cast<size_t>(num_layers) - 1);
-    weights.reserve(static_cast<size_t>(num_layers) - 1);
-
-    for (size_t y = 1; y < static_cast<size_t>(num_layers); ++y) {
-        int layer_sz = sizes[y];
-        std::vector<double> layer_biases;
-        layer_biases.reserve(static_cast<size_t>(layer_sz));
-        for (int i = 0; i < layer_sz; ++i)
-            layer_biases.emplace_back(dist(gen));
-        biases.emplace_back(std::move(layer_biases));
+    for (int& i : sizes) {
+        if (i <= 0) 
+            throw std::invalid_argument("Laywer size must be positive.");
     }
 
-    for (size_t y = 1; y < static_cast<size_t>(num_layers); ++y) {
-        int now_sz = sizes[y]; // W @ a => string in W = weights of the last layer for this neuron
-        int last_layer = sizes[y - 1];
+    size_t num_weights = num_layers - 1;
 
-        std::vector<std::vector<double>> layer_weights;
-        layer_weights.reserve(static_cast<size_t>(now_sz));
+    biases.reserve(num_weights);
+    weights.reserve(num_weights);
 
-        for (int i = 0; i < now_sz; ++i) {
-            std::vector<double> neuron_weights;
-            neuron_weights.reserve(static_cast<size_t>(last_layer));
-            for (int j = 0; j < last_layer; ++j)
-                neuron_weights.emplace_back(dist(gen));
-            layer_weights.emplace_back(std::move(neuron_weights));
-        }
-        weights.emplace_back(std::move(layer_weights));
+    for (size_t i = 1; i < num_layers; ++i) { // first is always input
+        // matrix of weights is must be in the left of the matrix results when multiply
+        biases.emplace_back(static_cast<size_t>(sizes[i]), 1);
+        weights.emplace_back(static_cast<size_t>(sizes[i]), static_cast<size_t>(sizes[i - 1]));
     }
+
 }
