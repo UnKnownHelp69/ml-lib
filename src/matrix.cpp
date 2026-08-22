@@ -23,7 +23,6 @@ Matrix Matrix::operator-(Matrix& addedMatrix) {
     return newMatrix;
 }
 
-
 Matrix Matrix::operator+(Matrix& addedMatrix) {
     size_t rowsAdded = addedMatrix.getRows();
     size_t columnsAdded = addedMatrix.getColumns();
@@ -41,7 +40,6 @@ Matrix Matrix::operator+(Matrix& addedMatrix) {
     Matrix newMatrix(rows, columns, newData);
     return newMatrix;
 }
-
 
 Matrix Matrix::operator*(Matrix& rightMatrix) {
     size_t rowsRight = rightMatrix.getRows();
@@ -63,6 +61,15 @@ Matrix Matrix::operator*(Matrix& rightMatrix) {
     return newMatrix;
 }
 
+bool Matrix::operator==(Matrix& rightMatrix) {
+    return (columns == rightMatrix.getColumns()) && (rows == rightMatrix.getRows())
+            && (dataRow == rightMatrix.getRefDataRow());
+}
+
+bool Matrix::operator!=(Matrix& rightMatrix) {
+    return (columns != rightMatrix.getColumns()) || (rows != rightMatrix.getRows())
+            || (dataRow != rightMatrix.getRefDataRow());
+}
 
 void Matrix::randomize() {
     std::random_device rd;
@@ -89,7 +96,6 @@ Scalar Matrix::norm(std::string_view norm) const {
         throw std::invalid_argument("Invalid norm name");
     }
 }
-
 
 void Matrix::applyActivation(std::string_view activationFunctionName) {
     Scalar (*activationFunction)(Scalar) = nullptr;

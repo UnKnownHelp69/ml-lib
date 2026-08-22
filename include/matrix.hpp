@@ -63,6 +63,8 @@ public:
     Matrix operator-(Matrix& subtractedMatrix);
     Matrix operator+(Matrix& addedMatrix);
     Matrix operator*(Matrix& rightMatrix);
+    bool operator==(Matrix& rightMatrix);
+    bool operator!=(Matrix& rightMatrix);
 
     inline Scalar sum() const {
         Scalar ans = 0;

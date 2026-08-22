@@ -125,6 +125,18 @@ int main() {
 
     CHECK_THROWS_AS(matrix29.applyActivation("blablabla"), std::invalid_argument);
 
+    // check == and != operators
+    Matrix matrix31(3, 2, {0, 0, 0, 0, 0, 0});
+    Matrix matrix32(3, 2, {0, 0, 0, 0, 0, 0});
+    Matrix matrix33(2, 3, {0, 0, 0, 0, 0, 0});
+    Matrix matrix34(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
+
+    CHECK(matrix31 == matrix32);
+    CHECK((matrix31 == matrix33) == false);
+    CHECK((matrix31 == matrix34) == false);
+    CHECK((matrix31 != matrix32) == false);
+    CHECK(matrix31 != matrix33);
+    CHECK(matrix31 != matrix34);
 
     printResults();
     return failed;
