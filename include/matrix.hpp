@@ -44,7 +44,7 @@ public:
 
     size_t getRows() const { return rows; }
     size_t getColumns() const { return columns; }
-    std::vector<Scalar>& getRefDataRow() { return dataRow; } 
+    const std::vector<Scalar>& getRefDataRow() const { return dataRow; } 
     
     // value is int because do not want any suprising attitude 
     Scalar& operator()(int row, int column) {
