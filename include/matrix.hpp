@@ -42,7 +42,7 @@ public:
 
     size_t getRows() const { return rows; }
     size_t getColumns() const { return columns; }
-    std::vector<Scalar>& getDataRow() { return dataRow; } 
+    std::vector<Scalar>& getRefDataRow() { return dataRow; } 
     
     // value is int because do not want any suprising attitude 
     Scalar& operator()(int row, int column) {
@@ -58,6 +58,9 @@ public:
         return dataRow[static_cast<size_t>(static_cast<size_t>(row) * columns + static_cast<size_t>(column))];
     }
 
-    Matrix operator*(Matrix rightMatrix);
+    Matrix operator-(Matrix& subtractedMatrix);
+    Matrix operator+(Matrix& addedMatrix);
+    Matrix operator*(Matrix& rightMatrix);
+
     void randomize();
 };

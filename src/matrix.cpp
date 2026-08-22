@@ -3,7 +3,46 @@
 #include <random>
 #include <omp.h>
 
-Matrix Matrix::operator*(Matrix rightMatrix) {
+
+Matrix Matrix::operator-(Matrix& addedMatrix) {
+    size_t rowsAdded = addedMatrix.getRows();
+    size_t columnsAdded = addedMatrix.getColumns();
+
+    if (columns != columnsAdded || rows != rowsAdded)
+        throw std::invalid_argument("Invalid matrix sizes while subtracking");
+
+    std::vector<Scalar> newData(rows * columns);    
+    auto refAddedMatrix = addedMatrix.getRefDataRow();
+
+    #pragma omp parallel for // may be later add if(rows * columns > trashHoldForHardware)
+    for (int i = 0; static_cast<size_t>(i) < rows * columns; ++i) 
+        newData[i] = this->dataRow[i] - refAddedMatrix[i];
+
+    Matrix newMatrix(rows, columns, newData);
+    return newMatrix;
+}
+
+
+Matrix Matrix::operator+(Matrix& addedMatrix) {
+    size_t rowsAdded = addedMatrix.getRows();
+    size_t columnsAdded = addedMatrix.getColumns();
+
+    if (columns != columnsAdded || rows != rowsAdded)
+        throw std::invalid_argument("Invalid matrix sizes while adding");
+
+    std::vector<Scalar> newData(rows * columns);    
+    auto refAddedMatrix = addedMatrix.getRefDataRow();
+
+    #pragma omp parallel for // may be later add if(totalSize > trashHolfForHardware)
+    for (int i = 0; static_cast<size_t>(i) < rows * columns; ++i) 
+        newData[i] = this->dataRow[i] + refAddedMatrix[i];
+
+    Matrix newMatrix(rows, columns, newData);
+    return newMatrix;
+}
+
+
+Matrix Matrix::operator*(Matrix& rightMatrix) {
     size_t rowsRight = rightMatrix.getRows();
     size_t columnsRight = rightMatrix.getColumns();
 
@@ -22,6 +61,7 @@ Matrix Matrix::operator*(Matrix rightMatrix) {
 
     return newMatrix;
 }
+
 
 void Matrix::randomize() {
     std::random_device rd;

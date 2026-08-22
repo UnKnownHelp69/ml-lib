@@ -76,6 +76,22 @@ int main() {
     Matrix matrix15(3, 2);
     Matrix matrix16(1, 1);
 
+    // check +, - operators
+    Matrix matrix17(3, 3, {1, 1, 1, 1, 1, 1, 1, 1, 1});
+    Matrix matrix18(3, 3, {1, 2, 3, 4, 5, 6, 7, 8, -9});
+    Matrix matrix19(1, 3, {1, 2, 3});
+
+    Matrix matrix21 = matrix17 - matrix18;
+    Matrix matrix22 = matrix17 + matrix18;
+    auto rowdata21 = matrix21.getRefDataRow();
+    auto rowdata22 = matrix22.getRefDataRow();
+
+    CHECK((rowdata21 == std::vector<Scalar>{0, -1, -2, -3, -4, -5, -6, -7, 10}));
+    CHECK((rowdata22 == std::vector<Scalar>{2, 3, 4, 5, 6, 7, 8, 9, -8}));
+
+    CHECK_THROWS_AS(matrix18 - matrix19, std::invalid_argument);
+    CHECK_THROWS_AS(matrix18 + matrix19, std::invalid_argument);
+
     printResults();
     return failed;
 }
