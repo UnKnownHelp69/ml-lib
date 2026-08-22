@@ -15,8 +15,8 @@ Matrix Matrix::operator-(Matrix& addedMatrix) {
     auto refAddedMatrix = addedMatrix.getRefDataRow();
 
     #pragma omp parallel for // may be later add if(rows * columns > trashHoldForHardware)
-    for (int i = 0; static_cast<size_t>(i) < rows * columns; ++i) 
-        newData[i] = this->dataRow[i] - refAddedMatrix[i];
+    for (size_t i = 0; i < rows * columns; ++i) 
+        newData[i] = dataRow[i] - refAddedMatrix[i];
 
     Matrix newMatrix(rows, columns, newData);
     return newMatrix;
@@ -34,8 +34,8 @@ Matrix Matrix::operator+(Matrix& addedMatrix) {
     auto refAddedMatrix = addedMatrix.getRefDataRow();
 
     #pragma omp parallel for // may be later add if(totalSize > trashHolfForHardware)
-    for (int i = 0; static_cast<size_t>(i) < rows * columns; ++i) 
-        newData[i] = this->dataRow[i] + refAddedMatrix[i];
+    for (size_t i = 0; i < rows * columns; ++i) 
+        newData[i] = dataRow[i] + refAddedMatrix[i];
 
     Matrix newMatrix(rows, columns, newData);
     return newMatrix;
@@ -71,4 +71,20 @@ void Matrix::randomize() {
     for (size_t i = 0; i < rows * columns; ++i) {
         dataRow[i] = dist(gen);
     }
-}   
+}
+
+Scalar Matrix::norm(std::string_view norm) const {
+    if (norm == "none" || norm == "frob"){
+        return std::sqrt(sumSq());
+    } else if (norm == "l1") {
+        if (rows != 1 && columns != 1) 
+            throw std::domain_error("L1-norm is only for vectors for now");
+        return sumAbs();
+    } else if (norm == "l2") {
+        if (rows != 1 && columns != 1) 
+            throw std::domain_error("L2-norm is only for vectors for now");
+        return std::sqrt(sumSq());
+    } else {
+        throw std::invalid_argument("Invalid norm name");
+    }
+}

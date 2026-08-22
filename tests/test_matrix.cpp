@@ -92,6 +92,28 @@ int main() {
     CHECK_THROWS_AS(matrix18 - matrix19, std::invalid_argument);
     CHECK_THROWS_AS(matrix18 + matrix19, std::invalid_argument);
 
+    // check sum functions
+    CHECK(matrix1.sum() == -2);
+    CHECK(matrix1.sumAbs() == 14);
+    CHECK(matrix1.sumSq() == 32);
+
+    // check norms
+    Matrix matrix23(1, 3, {-3, 4, -12});
+    Matrix matrix24(3, 1, {1.5, -0.25, 3.75});
+    Matrix matrix25(1, 4, {1, 2, 2, 4});
+    Matrix matrix26(1, 2, {0.5, 1.2});
+    Matrix matrix27(2, 2, {1, 2, 2, 4});
+    Matrix matrix28(2, 2, {0.5, -1.5, 2.0, 0.0});
+
+    CHECK(matrix23.norm("l1") == 19);
+    CHECK(matrix24.norm("l1") == 5.5);
+    CHECK(matrix25.norm("l2") == 5);
+    CHECK(matrix26.norm("l2") == 1.3);
+    CHECK(matrix27.norm("frob") == 5);
+    CHECK(matrix27.norm() == 5);
+    CHECK_THROWS_AS(matrix28.norm("l2"), std::domain_error);
+    CHECK_THROWS_AS(matrix28.norm("l1"), std::domain_error);
+
     printResults();
     return failed;
 }

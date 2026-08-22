@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <cassert>
 #include <type_traits>
+#include <string>
+#include <cmath>
 
 class Matrix {
 private:
@@ -61,6 +63,24 @@ public:
     Matrix operator-(Matrix& subtractedMatrix);
     Matrix operator+(Matrix& addedMatrix);
     Matrix operator*(Matrix& rightMatrix);
+
+    inline Scalar sum() const {
+        Scalar ans = 0;
+        for (const auto& el : dataRow) ans += el;
+        return ans;
+    }
+    inline Scalar sumAbs() const {
+        Scalar ans = 0;
+        for (const auto& el : dataRow) ans += std::abs(el);
+        return ans;
+    }
+    inline Scalar sumSq() const {
+        Scalar ans = 0;
+        for (const auto& el : dataRow) ans += el * el;
+        return ans;
+    }
+
+    Scalar norm(std::string_view norm = "none") const;
 
     void randomize();
 };
