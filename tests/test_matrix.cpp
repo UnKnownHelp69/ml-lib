@@ -1,4 +1,5 @@
 #include <vector>
+#include <stdexcept>
 
 #include "matrix.hpp"
 #include "types.hpp"
@@ -97,7 +98,7 @@ int main() {
     CHECK(matrix1.sumAbs() == 14);
     CHECK(matrix1.sumSq() == 32);
 
-    // check norms
+    // check norms (extensible with new norms)
     Matrix matrix23(1, 3, {-3, 4, -12});
     Matrix matrix24(3, 1, {1.5, -0.25, 3.75});
     Matrix matrix25(1, 4, {1, 2, 2, 4});
@@ -113,6 +114,17 @@ int main() {
     CHECK(matrix27.norm() == 5);
     CHECK_THROWS_AS(matrix28.norm("l2"), std::domain_error);
     CHECK_THROWS_AS(matrix28.norm("l1"), std::domain_error);
+
+    // check activation functions (extensible with new activation functions)
+    Matrix matrix29(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
+    Matrix matrix30(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
+    matrix29.applyActivation();
+    matrix30.applyActivation("sigmoid");
+    CHECK((matrix29.getRefDataRow() == std::vector<Scalar>{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}));
+    CHECK((matrix30.getRefDataRow() == std::vector<Scalar>{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}));
+
+    CHECK_THROWS_AS(matrix29.applyActivation("blablabla"), std::invalid_argument);
+
 
     printResults();
     return failed;

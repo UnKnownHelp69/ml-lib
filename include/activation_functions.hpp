@@ -4,7 +4,7 @@
 #include <cmath>
 
 inline Scalar sigmoid(Scalar z) {
-    static_cast<Scalar>(1) / (static_cast<Scalar>(1) + std::exp(-z));
+    return static_cast<Scalar>(1) / (static_cast<Scalar>(1) + std::exp(-z));
 }
 inline Scalar sigmoid_prime(Scalar z) {
     Scalar sigmoid_value = sigmoid(z);

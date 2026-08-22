@@ -1,4 +1,5 @@
 #include <vector>
+#include <stdexcept>
 
 #include "network.hpp"
 #include "test_utlis.hpp"

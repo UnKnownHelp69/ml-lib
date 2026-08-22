@@ -9,3 +9,7 @@ add_test(NAME test_network COMMAND test_network)
 add_executable(test_cost_functions test_cost_functions.cpp)
 target_link_libraries(test_cost_functions PRIVATE mllib)
 add_test(NAME test_cost_functions COMMAND test_cost_functions)
+
+add_executable(test_activation_functions test_activation_functions.cpp)
+target_link_libraries(test_activation_functions PRIVATE mllib)
+add_test(NAME test_activation_functions COMMAND test_activation_functions)

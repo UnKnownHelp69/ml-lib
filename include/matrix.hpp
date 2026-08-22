@@ -80,7 +80,8 @@ public:
         return ans;
     }
 
-    Scalar norm(std::string_view norm = "none") const;
+    Scalar norm(std::string_view norm = "frob") const;
 
+    void applyActivation(std::string_view activationFunctionName = "sigmoid");
     void randomize();
 };

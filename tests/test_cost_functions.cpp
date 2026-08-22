@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "test_utlis.hpp"
 #include "cost_functions.hpp"
 #include "matrix.hpp"

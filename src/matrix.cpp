@@ -1,4 +1,5 @@
 #include "matrix.hpp"
+#include "activation_functions.hpp"
 
 #include <random>
 #include <omp.h>
@@ -74,7 +75,7 @@ void Matrix::randomize() {
 }
 
 Scalar Matrix::norm(std::string_view norm) const {
-    if (norm == "none" || norm == "frob"){
+    if (norm == "frob"){
         return std::sqrt(sumSq());
     } else if (norm == "l1") {
         if (rows != 1 && columns != 1) 
@@ -87,4 +88,16 @@ Scalar Matrix::norm(std::string_view norm) const {
     } else {
         throw std::invalid_argument("Invalid norm name");
     }
+}
+
+
+void Matrix::applyActivation(std::string_view activationFunctionName) {
+    Scalar (*activationFunction)(Scalar) = nullptr;
+    if (activationFunctionName == "sigmoid") {
+        activationFunction = &sigmoid;
+    } else {
+        throw std::invalid_argument("Invalid name of the activation function");
+    }
+    for (size_t i = 0; i < rows * columns; ++i)
+        dataRow[i] = activationFunction(dataRow[i]);
 }
