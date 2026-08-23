@@ -1,5 +1,6 @@
 #include <vector>
 #include <stdexcept>
+#include <utility>
 
 #include "matrix.hpp"
 #include "types.hpp"
@@ -137,6 +138,48 @@ int main() {
     CHECK((matrix31 != matrix32) == false);
     CHECK(matrix31 != matrix33);
     CHECK(matrix31 != matrix34);
+
+    // check zeros
+    Matrix matrix35(1, 3, {-3, 4, -12});
+    Matrix matrix36(3, 1, {1.5, -0.25, 3.75});
+    matrix35.zeros();
+    matrix36.zeros();
+
+    CHECK((matrix35.getRefDataRow() == std::vector<Scalar>{0, 0, 0}));
+    CHECK((matrix36.getRefDataRow() == std::vector<Scalar>{0, 0, 0}));
+
+    // check shape
+    CHECK((matrix35.shape() == std::pair<size_t, size_t>{1, 3}));
+    CHECK((matrix36.shape() == std::pair<size_t, size_t>{3, 1}));
+
+    // check transpose
+    Matrix matrix37(2, 2, {1, 2, 3, 4});
+    Matrix matrix38(1, 1, std::vector<Scalar>{5});
+    Matrix matrix39(4, 2, {1, 2, 3, 4, 5, 6, 7, 8});
+    Matrix matrix40(3, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9});
+
+    matrix37.transpose();
+    matrix38.transpose();
+    matrix39.transpose();
+    matrix40.transpose();
+
+    CHECK((matrix37.getRefDataRow() == std::vector<Scalar>{1, 3, 2, 4}));
+    CHECK((matrix38.getRefDataRow() == std::vector<Scalar>{5}));
+    CHECK((matrix39.getRefDataRow() == std::vector<Scalar>{1, 3, 5, 7, 2, 4, 6, 8}));
+    CHECK((matrix40.getRefDataRow() == std::vector<Scalar>{1, 4, 7, 2, 5, 8, 3, 6, 9}));
+
+    CHECK((matrix37.shape() == std::pair<size_t, size_t>{2, 2}));
+    CHECK((matrix38.shape() == std::pair<size_t, size_t>{1, 1}));
+    CHECK((matrix39.shape() == std::pair<size_t, size_t>{2, 4}));
+    CHECK((matrix40.shape() == std::pair<size_t, size_t>{3, 3}));
+
+    // check argmin, argmax, minimum, maximum
+    Matrix matrix41(2, 2, {1, 2, 3, 4});
+
+    CHECK(matrix41.argmax() == 3);
+    CHECK(matrix41.argmin() == 0);
+    CHECK(matrix41.minimum() == 1);
+    CHECK(matrix41.maximum() == 4);
 
     printResults();
     return failed;

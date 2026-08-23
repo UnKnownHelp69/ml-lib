@@ -7,6 +7,7 @@
 #include <type_traits>
 #include <string>
 #include <cmath>
+#include <utility>
 
 class Matrix {
 private:
@@ -85,5 +86,14 @@ public:
     Scalar norm(std::string_view norm = "frob") const;
 
     void applyActivation(std::string_view activationFunctionName = "sigmoid");
+    void transpose();
     void randomize();
+    void zeros();
+
+    // first argument is rows, second is columns
+    std::pair<size_t, size_t> shape() { return {rows, columns}; }
+    size_t argmax(); // add axis in the future (-1 - as now, 0 - for all columns, 1 for all rows)
+    size_t argmin();
+    Scalar maximum();
+    Scalar minimum();
 };

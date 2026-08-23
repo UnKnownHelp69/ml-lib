@@ -1,6 +1,7 @@
 #include "matrix.hpp"
 #include "activation_functions.hpp"
 
+#include <algorithm>
 #include <random>
 #include <omp.h>
 
@@ -71,6 +72,18 @@ bool Matrix::operator!=(Matrix& rightMatrix) {
             || (dataRow != rightMatrix.getRefDataRow());
 }
 
+void Matrix::transpose() {
+    std::vector<Scalar> newData(rows * columns);
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < columns; ++j) {
+            newData[j * rows + i] = dataRow[i * columns + j];
+        }
+    }
+    dataRow = std::move(newData);
+
+    std::swap(columns, rows);
+}
+
 void Matrix::randomize() {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -79,6 +92,11 @@ void Matrix::randomize() {
     for (size_t i = 0; i < rows * columns; ++i) {
         dataRow[i] = dist(gen);
     }
+}
+
+void Matrix::zeros() {
+    for (size_t i = 0; i < rows * columns; ++i)
+        dataRow[i] = 0;
 }
 
 Scalar Matrix::norm(std::string_view norm) const {
@@ -102,8 +120,62 @@ void Matrix::applyActivation(std::string_view activationFunctionName) {
     if (activationFunctionName == "sigmoid") {
         activationFunction = &sigmoid;
     } else {
-        throw std::invalid_argument("Invalid name of the activation function");
+        throw std::invalid_argument("Invalid name of the activation function.");
     }
     for (size_t i = 0; i < rows * columns; ++i)
         dataRow[i] = activationFunction(dataRow[i]);
+}
+
+size_t Matrix::argmax() {
+    if (dataRow.size() == 0) 
+        throw std::domain_error("Size of matrix is zero, so can not find max el.");
+
+    size_t ind = 0;
+    Scalar maxEl = dataRow[0];
+
+    for (size_t i = 0; i < rows * columns; ++i) {
+        Scalar now = dataRow[i];
+        if (now > maxEl) {
+            maxEl = now;
+            ind = i;
+        }
+    }
+    return ind;
+}
+
+size_t Matrix::argmin() {
+    if (dataRow.size() == 0) 
+        throw std::domain_error("Size of matrix is zero, so can not find max el.");
+
+    size_t ind = 0;
+    Scalar minEl = dataRow[0];
+
+    for (size_t i = 0; i < rows * columns; ++i) {
+        Scalar now = dataRow[i];
+        if (now < minEl) {
+            minEl = now;
+            ind = i;
+        }
+    }
+    return ind;
+}
+
+Scalar Matrix::maximum() {
+    if (dataRow.size() == 0) 
+        throw std::domain_error("Size of matrix is zero, so can not find max el.");
+
+    Scalar maxEl = dataRow[0];
+    for (size_t i = 0; i < rows * columns; ++i)
+        maxEl = std::max(maxEl, dataRow[i]);
+    return maxEl;
+}
+
+Scalar Matrix::minimum() {
+    if (dataRow.size() == 0) 
+        throw std::domain_error("Size of matrix is zero, so can not find max el.");
+
+    Scalar minEl = dataRow[0];
+    for (size_t i = 0; i < rows * columns; ++i) 
+        minEl = std::min(minEl, dataRow[i]);
+    return minEl;
 }
