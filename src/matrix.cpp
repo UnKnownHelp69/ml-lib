@@ -6,7 +6,7 @@
 #include <omp.h>
 
 
-Matrix Matrix::operator-(Matrix& addedMatrix) {
+Matrix Matrix::operator-(const Matrix& addedMatrix) {
     size_t rowsAdded = addedMatrix.getRows();
     size_t columnsAdded = addedMatrix.getColumns();
 
@@ -24,7 +24,7 @@ Matrix Matrix::operator-(Matrix& addedMatrix) {
     return newMatrix;
 }
 
-Matrix Matrix::operator+(Matrix& addedMatrix) {
+Matrix Matrix::operator+(const Matrix& addedMatrix) {
     size_t rowsAdded = addedMatrix.getRows();
     size_t columnsAdded = addedMatrix.getColumns();
 
@@ -42,7 +42,7 @@ Matrix Matrix::operator+(Matrix& addedMatrix) {
     return newMatrix;
 }
 
-Matrix Matrix::operator*(Matrix& rightMatrix) {
+Matrix Matrix::operator*(const Matrix& rightMatrix) {
     size_t rowsRight = rightMatrix.getRows();
     size_t columnsRight = rightMatrix.getColumns();
 
@@ -60,6 +60,15 @@ Matrix Matrix::operator*(Matrix& rightMatrix) {
         newMatrix(i, j) += (*this)(i, k) * rightMatrix(k, j);
 
     return newMatrix;
+}
+
+Matrix& Matrix::operator=(const Matrix& rightMatrix) {
+    rows = rightMatrix.getRows();
+    columns = rightMatrix.getColumns();
+
+    const auto& rightDataRow = rightMatrix.getRefDataRow();
+    dataRow = rightDataRow;
+    return *this;
 }
 
 bool Matrix::operator==(Matrix& rightMatrix) {

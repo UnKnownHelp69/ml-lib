@@ -181,6 +181,25 @@ int main() {
     CHECK(matrix41.minimum() == 1);
     CHECK(matrix41.maximum() == 4);
 
+    // check copy constructor
+    Matrix matrix42(2, 2, {1, 2, 3, 4});
+    Matrix matrix43 = matrix42;
+
+    CHECK(matrix42.getRefDataRow() == matrix43.getRefDataRow());
+    CHECK(matrix42.getRows() == matrix43.getRows());
+    CHECK(matrix42.getColumns() == matrix43.getColumns());
+    matrix42(0, 0) = 0;
+    CHECK(matrix42.getRefDataRow() != matrix43.getRefDataRow());
+
+    // check operator =
+    Matrix matrix44(2, 2, {0, 0, 0, 0});
+    matrix43 = matrix44;
+    CHECK(matrix44.getRefDataRow() == matrix43.getRefDataRow());
+    CHECK(matrix44.getRows() == matrix43.getRows());
+    CHECK(matrix44.getColumns() == matrix43.getColumns());
+    matrix44(0, 0) = 1;
+    CHECK(matrix44.getRefDataRow() != matrix43.getRefDataRow());
+
     printResults();
     return failed;
 }

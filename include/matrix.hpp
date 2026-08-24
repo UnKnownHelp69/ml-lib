@@ -42,6 +42,8 @@ public:
         }
     Matrix(size_t _rows, size_t _columns) : rows(_rows), columns(_columns), 
         dataRow(_rows * _columns) {randomize();} // note that it is randoming
+    Matrix(const Matrix& other) : rows(other.getRows()), columns(other.getColumns()), 
+        dataRow(other.getRefDataRow()) {}
 
     size_t getRows() const { return rows; }
     size_t getColumns() const { return columns; }
@@ -61,9 +63,10 @@ public:
         return dataRow[static_cast<size_t>(static_cast<size_t>(row) * columns + static_cast<size_t>(column))];
     }
 
-    Matrix operator-(Matrix& subtractedMatrix);
-    Matrix operator+(Matrix& addedMatrix);
-    Matrix operator*(Matrix& rightMatrix);
+    Matrix operator-(const Matrix& subtractedMatrix);
+    Matrix operator+(const Matrix& addedMatrix);
+    Matrix operator*(const Matrix& rightMatrix);
+    Matrix& operator=(const Matrix& rightMatrix);
     bool operator==(Matrix& rightMatrix);
     bool operator!=(Matrix& rightMatrix);
 
