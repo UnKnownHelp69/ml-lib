@@ -63,12 +63,13 @@ public:
         return dataRow[static_cast<size_t>(static_cast<size_t>(row) * columns + static_cast<size_t>(column))];
     }
 
-    Matrix operator-(const Matrix& subtractedMatrix);
-    Matrix operator+(const Matrix& addedMatrix);
-    Matrix operator*(const Matrix& rightMatrix);
+    Matrix operator-(const Matrix& subtractedMatrix) const;
+    Matrix operator+(const Matrix& addedMatrix) const;
+    Matrix operator*(const Matrix& rightMatrix) const;
+    Matrix operator%(const Matrix& rightMatrix) const; // hadamard multiplication
     Matrix& operator=(const Matrix& rightMatrix);
-    bool operator==(Matrix& rightMatrix);
-    bool operator!=(Matrix& rightMatrix);
+    bool operator==(Matrix& rightMatrix) const;
+    bool operator!=(Matrix& rightMatrix) const;
 
     inline Scalar sum() const {
         Scalar ans = 0;

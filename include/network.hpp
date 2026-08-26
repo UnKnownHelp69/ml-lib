@@ -20,4 +20,7 @@ public:
 
     Matrix feedforward(Matrix a, std::string_view nameActivationFunction = "sigmoid", 
             bool ifApplyActivation = true);
+
+    Matrix cost_derivative(Matrix output_activations, Matrix y) { return output_activations - y; };
+    std::pair<std::vector<Matrix>, std::vector<Matrix>> backprop(Matrix& x, Matrix& y);
 };

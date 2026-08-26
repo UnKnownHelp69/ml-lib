@@ -119,10 +119,13 @@ int main() {
     // check activation functions (extensible with new activation functions)
     Matrix matrix29(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
     Matrix matrix30(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
+    Matrix matrix30_1(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
     matrix29.applyActivation();
     matrix30.applyActivation("sigmoid");
+    matrix30_1.applyActivation("sigmoid_prime");
     CHECK((matrix29.getRefDataRow() == std::vector<Scalar>{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}));
     CHECK((matrix30.getRefDataRow() == std::vector<Scalar>{0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}));
+    CHECK((matrix30_1.getRefDataRow() == std::vector<Scalar>{0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25}));
 
     CHECK_THROWS_AS(matrix29.applyActivation("blablabla"), std::invalid_argument);
 
@@ -199,6 +202,19 @@ int main() {
     CHECK(matrix44.getColumns() == matrix43.getColumns());
     matrix44(0, 0) = 1;
     CHECK(matrix44.getRefDataRow() != matrix43.getRefDataRow());
+
+    // check hadamart multiplication
+    Matrix matrix45(2, 2, {1, 2, 3, 4});
+    Matrix matrix46(2, 2, {1, 2, 3, 4});
+    Matrix matrix47(1, 3, {1, 2, 3});
+    Matrix matrix48(3, 1, {1, 2, 3});
+    Matrix matrix49(3, 1, {1, 2, 3});
+
+    CHECK(((matrix45 % matrix46).getRefDataRow() == std::vector<Scalar>({1, 4, 9, 16})));
+    CHECK(((matrix46 % matrix45).getRefDataRow() == std::vector<Scalar>({1, 4, 9, 16})));
+    CHECK(((matrix48 % matrix49).getRefDataRow() == std::vector<Scalar>({1, 4, 9})));
+    CHECK_THROWS_AS(matrix45 % matrix47, std::invalid_argument);
+    CHECK_THROWS_AS(matrix47 % matrix48, std::invalid_argument);
 
     printResults();
     return failed;

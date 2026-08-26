@@ -6,7 +6,7 @@
 #include <omp.h>
 
 
-Matrix Matrix::operator-(const Matrix& addedMatrix) {
+Matrix Matrix::operator-(const Matrix& addedMatrix) const {
     size_t rowsAdded = addedMatrix.getRows();
     size_t columnsAdded = addedMatrix.getColumns();
 
@@ -24,7 +24,7 @@ Matrix Matrix::operator-(const Matrix& addedMatrix) {
     return newMatrix;
 }
 
-Matrix Matrix::operator+(const Matrix& addedMatrix) {
+Matrix Matrix::operator+(const Matrix& addedMatrix) const {
     size_t rowsAdded = addedMatrix.getRows();
     size_t columnsAdded = addedMatrix.getColumns();
 
@@ -42,12 +42,16 @@ Matrix Matrix::operator+(const Matrix& addedMatrix) {
     return newMatrix;
 }
 
-Matrix Matrix::operator*(const Matrix& rightMatrix) {
+Matrix Matrix::operator*(const Matrix& rightMatrix) const {
     size_t rowsRight = rightMatrix.getRows();
     size_t columnsRight = rightMatrix.getColumns();
 
     if (columns != rowsRight)
-        throw std::invalid_argument("Invalid matrix sizes while multiplying");
+        throw std::invalid_argument(
+            "Invalid matrix sizes while multiplying: left matrix size: " +
+            std::to_string(rows) + "x" + std::to_string(columns) + "; right matrix size: " +
+            std::to_string(rowsRight) + "x" + std::to_string(columnsRight)
+        );
 
     std::vector<Scalar> newData;
     newData.resize(rows * columnsRight);
@@ -62,6 +66,27 @@ Matrix Matrix::operator*(const Matrix& rightMatrix) {
     return newMatrix;
 }
 
+
+Matrix Matrix::operator%(const Matrix& rightMatrix) const {
+    size_t rowsRight = rightMatrix.getRows();
+    size_t columnsRight = rightMatrix.getColumns();
+
+    if ((columns != columnsRight) || (rows != rowsRight))
+        throw std::invalid_argument(
+            "Invalid matrix sizes while hadamart multiplying: left matrix size: " +
+            std::to_string(rows) + "x" + std::to_string(columns) + "; right matrix size: " +
+            std::to_string(rowsRight) + "x" + std::to_string(columnsRight)
+        );
+
+    Matrix newMatrix(*this);
+
+    for (int i = 0; static_cast<size_t>(i) < rows; ++i) 
+    for (int j = 0; static_cast<size_t>(j) < columns; ++j) 
+        newMatrix(i, j) *=  rightMatrix(i, j);
+
+    return newMatrix;
+}
+
 Matrix& Matrix::operator=(const Matrix& rightMatrix) {
     rows = rightMatrix.getRows();
     columns = rightMatrix.getColumns();
@@ -71,12 +96,12 @@ Matrix& Matrix::operator=(const Matrix& rightMatrix) {
     return *this;
 }
 
-bool Matrix::operator==(Matrix& rightMatrix) {
+bool Matrix::operator==(Matrix& rightMatrix) const {
     return (columns == rightMatrix.getColumns()) && (rows == rightMatrix.getRows())
             && (dataRow == rightMatrix.getRefDataRow());
 }
 
-bool Matrix::operator!=(Matrix& rightMatrix) {
+bool Matrix::operator!=(Matrix& rightMatrix) const {
     return (columns != rightMatrix.getColumns()) || (rows != rightMatrix.getRows())
             || (dataRow != rightMatrix.getRefDataRow());
 }
@@ -128,6 +153,8 @@ void Matrix::applyActivation(std::string_view activationFunctionName) {
     Scalar (*activationFunction)(Scalar) = nullptr;
     if (activationFunctionName == "sigmoid") {
         activationFunction = &sigmoid;
+    } else if (activationFunctionName == "sigmoid_prime"){
+        activationFunction = &sigmoid_prime;
     } else {
         throw std::invalid_argument("Invalid name of the activation function.");
     }

@@ -53,19 +53,26 @@ int main() {
     // check feedforward without activation function
     std::vector<int> sizes2 = {3, 2, 4, 3};
     Matrix input2(3, 1, {1, 2, 3});
-    Matrix matrix1(2, 3, {1, 2, 3, 4, 5, 6});
-    Matrix matrix2(4, 2, {1, 2, 3, 4, 5, 6, 7, 8});
-    Matrix matrix3(3, 4, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
-    Matrix bias1(2, 1, {1, 2});
-    Matrix bias2(4, 1, {1, 2, 3, 4});
-    Matrix bias3(3, 1, {1, 2, 3});
+    Matrix matrix2_1(2, 3, {1, 2, 3, 4, 5, 6});
+    Matrix matrix2_2(4, 2, {1, 2, 3, 4, 5, 6, 7, 8});
+    Matrix matrix2_3(3, 4, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+    Matrix bias2_1(2, 1, {1, 2});
+    Matrix bias2_2(4, 1, {1, 2, 3, 4});
+    Matrix bias2_3(3, 1, {1, 2, 3});
 
-    std::vector<Matrix> weights2 = {matrix1, matrix2, matrix3};
-    std::vector<Matrix> biases2 = {bias1, bias2, bias3};
+    std::vector<Matrix> weights2 = {matrix2_1, matrix2_2, matrix2_3};
+    std::vector<Matrix> biases2 = {bias2_1, bias2_2, bias2_3};
 
     Network network2(sizes2, biases2, weights2);
     Matrix matrix4(3, 1, {2821, 6542, 10263});
     CHECK(network2.feedforward(input2, "", false) == matrix4);
+
+    // check random backprop (just if works, no deterministic result check, which i have to add) 
+    Network network3({784, 30, 10});
+    Matrix x3(784, 1), y3(10, 1);
+    auto tmp3 = network3.backprop(x3, y3);
+
+    // need to determenistic check if backprop really works
     
     printResults();
     return failed;
