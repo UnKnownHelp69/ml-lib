@@ -66,6 +66,16 @@ Matrix Matrix::operator*(const Matrix& rightMatrix) const {
     return newMatrix;
 }
 
+Matrix Matrix::operator*(const Scalar& rightScalar) const {
+    std::vector<Scalar> newData;
+    newData.resize(rows * columns);
+    for (size_t i = 0; i < rows * columns; ++i)
+        newData[i] = dataRow[i] * rightScalar;
+
+    Matrix newMatrix(rows, columns, newData);
+    return newMatrix;
+}
+
 
 Matrix Matrix::operator%(const Matrix& rightMatrix) const {
     size_t rowsRight = rightMatrix.getRows();

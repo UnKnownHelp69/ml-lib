@@ -2,7 +2,6 @@
 #include "types.hpp"
 
 #include <algorithm>
-#include <utility>
 #include <random>
 #include <stdexcept>
 
@@ -133,4 +132,40 @@ std::pair<std::vector<Matrix>, std::vector<Matrix>> Network::backprop(Matrix& x,
     }
 
     return {nablaB, nablaW};
+}
+
+void Network::update_mini_batch(std::vector<std::pair<Matrix, Matrix>> mini_batch, 
+        Scalar eta) {
+    /*
+    Update the network weights and biases, using gradient descent by 
+    backpropagation and apply it to mini_batch. 
+    
+    mini_batch is a pair of Matrixes (x, y)
+    eta is a learning rate
+    */
+    size_t numWeights = num_layers - 1;
+    std::vector<Matrix> nabla_b, nabla_W;
+    nabla_b.reserve(numWeights);
+    nabla_W.reserve(numWeights);
+    for (size_t i = 0; i < numWeights; ++i) {
+        nabla_b.emplace_back(biases[i].getRows(), biases[i].getColumns()).zeros();
+        nabla_W.emplace_back(weights[i].getRows(), weights[i].getColumns()).zeros();
+    }
+    size_t miniBatchSize = mini_batch.size(); 
+
+    for (size_t i = 0; i < miniBatchSize; ++i) {
+        Matrix& x = mini_batch[i].first;
+        Matrix& y = mini_batch[i].second;
+        auto tmp = backprop(x, y);
+        std::vector<Matrix>& delta_nabla_b = tmp.first;
+        std::vector<Matrix>& delta_nabla_W = tmp.second;
+        for (size_t j = 0; j < numWeights; ++j) {
+            nabla_b[j] = nabla_b[j] + delta_nabla_b[j]; // need to change on += (now matrix has not this operator)
+            nabla_W[j] = nabla_W[j] + delta_nabla_W[j];
+        }
+    }
+    for (size_t i = 0; i < numWeights; ++i) {
+        weights[i] = weights[i] - nabla_W[i] * (eta / miniBatchSize);
+        biases[i] = biases[i] - nabla_b[i] * (eta / miniBatchSize);
+    }
 }

@@ -66,6 +66,7 @@ public:
     Matrix operator-(const Matrix& subtractedMatrix) const;
     Matrix operator+(const Matrix& addedMatrix) const;
     Matrix operator*(const Matrix& rightMatrix) const;
+    Matrix operator*(const Scalar& rightScalar) const;
     Matrix operator%(const Matrix& rightMatrix) const; // hadamard multiplication
     Matrix& operator=(const Matrix& rightMatrix);
     bool operator==(Matrix& rightMatrix) const;

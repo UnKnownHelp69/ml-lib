@@ -73,6 +73,17 @@ int main() {
     auto tmp3 = network3.backprop(x3, y3);
 
     // need to determenistic check if backprop really works
+
+
+    // test random update_mini_batch
+    Network network4({784, 30, 10});
+    Matrix x4(784, 1), y4(10, 1);
+    //network3.update_mini_batch(std::vector<std::pair<Matrix, Matrix>>(std::pair<Matrix, Matrix>(x4, y4)), Scalar(3.0));
+    network3.update_mini_batch({{x4, y4}}, Scalar(3.0));
+
+
+    // need to determenistic check if update_mini_batch really works
+
     
     printResults();
     return failed;

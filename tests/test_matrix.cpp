@@ -216,6 +216,13 @@ int main() {
     CHECK_THROWS_AS(matrix45 % matrix47, std::invalid_argument);
     CHECK_THROWS_AS(matrix47 % matrix48, std::invalid_argument);
 
+    // check operator * with matrix on Scalar
+    Matrix matrix50(3, 1, {1, -2, 3});
+    matrix50 = matrix50 * Scalar(3);
+    CHECK((matrix50.getRefDataRow() == std::vector<Scalar>({3, -6, 9})));
+    matrix50 = matrix50 * Scalar(0);
+    CHECK((matrix50.getRefDataRow() == std::vector<Scalar>({0, 0, 0})));
+
     printResults();
     return failed;
 }

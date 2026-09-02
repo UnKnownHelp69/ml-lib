@@ -3,6 +3,8 @@
 #include "matrix.hpp"
 
 #include <vector>
+#include <utility>
+
 
 class Network {
 private:
@@ -23,4 +25,5 @@ public:
 
     Matrix cost_derivative(Matrix output_activations, Matrix y) { return output_activations - y; };
     std::pair<std::vector<Matrix>, std::vector<Matrix>> backprop(Matrix& x, Matrix& y);
+    void update_mini_batch(std::vector<std::pair<Matrix, Matrix>> mini_batch, Scalar eta);
 };
