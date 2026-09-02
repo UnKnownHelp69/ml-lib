@@ -1,5 +1,6 @@
 #include <vector>
 #include <stdexcept>
+#include <iostream>
 
 #include "network.hpp"
 #include "test_utlis.hpp"
@@ -89,14 +90,20 @@ int main() {
     Network network5({784, 30, 10});
     Matrix x5_0(784, 1), y5_0(10, 1);
     Matrix x5_1(784, 1), y5_1(10, 1);
+    y5_0.zeros(); y5_0(0, 0) = 1.0;
+    y5_1.zeros(); y5_1(5, 0) = 1.0;    
     std::vector<std::pair<Matrix, Matrix>> trainingData5 = {{x5_0, y5_0}, {x5_1, y5_1}};
     size_t epochs5 = 30;
     size_t mini_batch_size5 = 1;
     Scalar eta5 = 3.0;
     std::vector<std::pair<Matrix, Matrix>> testData5 = {};
-    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5);
+    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5); // empty testData5
     testData5 = {{x5_0, y5_0}, {x5_1, y5_1}};
-    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5);
+    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5); // with evaluate
+
+
+    // random test of the evaluate, need to add deterministic check
+    std::cout << "How much is correct for random SGD: " << network5.evaluate(testData5) << "\n"; 
 
     
     // need to determenistic check if update_mini_batch really works correct

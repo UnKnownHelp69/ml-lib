@@ -194,7 +194,23 @@ void Network::SGD(std::vector<std::pair<Matrix, Matrix>>& trainingData, size_t e
     if (!testData.size()) {
         std::cout << "Nothing to test\n";
     } else {
-        // i need to add there evaluate implementation
-        std::cout << "Not implemented, but will be soon\n";
+        std::cout << evaluate(testData) << "\\" << testData.size() << " is correct\n";
     }
+}
+
+int Network::evaluate(std::vector<std::pair<Matrix, Matrix>>& testData) {
+    /*
+    Return amount of correct defined amount of the numbers by the model;
+    Correct answer is defined by argmax.
+    */
+    size_t dataSize = testData.size();
+    int correctAmount = 0;
+    for (size_t i = 0; i < dataSize; ++i) {
+        auto x = testData[i].first; 
+        auto y = testData[i].second;
+        if (y.argmax() == feedforward(x).argmax())
+            ++correctAmount;
+    }
+
+    return correctAmount;
 }
