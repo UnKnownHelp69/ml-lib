@@ -25,5 +25,7 @@ public:
 
     Matrix cost_derivative(Matrix output_activations, Matrix y) { return output_activations - y; };
     std::pair<std::vector<Matrix>, std::vector<Matrix>> backprop(Matrix& x, Matrix& y);
-    void update_mini_batch(std::vector<std::pair<Matrix, Matrix>> mini_batch, Scalar eta);
+    void update_mini_batch(std::vector<std::pair<Matrix, Matrix>>& mini_batch, Scalar eta);
+    void SGD(std::vector<std::pair<Matrix, Matrix>>& trainingData, size_t epochs, 
+        size_t mini_batch_size, Scalar eta, std::vector<std::pair<Matrix, Matrix>>& testData);
 };

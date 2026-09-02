@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <stdexcept>
+#include <iostream>
 
 Network::Network(std::vector<int> _sizes) : num_layers(_sizes.size()), sizes(std::move(_sizes)) {
     if (sizes.empty() || sizes.size() == 1) 
@@ -134,7 +135,7 @@ std::pair<std::vector<Matrix>, std::vector<Matrix>> Network::backprop(Matrix& x,
     return {nablaB, nablaW};
 }
 
-void Network::update_mini_batch(std::vector<std::pair<Matrix, Matrix>> mini_batch, 
+void Network::update_mini_batch(std::vector<std::pair<Matrix, Matrix>>& mini_batch, 
         Scalar eta) {
     /*
     Update the network weights and biases, using gradient descent by 
@@ -165,7 +166,35 @@ void Network::update_mini_batch(std::vector<std::pair<Matrix, Matrix>> mini_batc
         }
     }
     for (size_t i = 0; i < numWeights; ++i) {
-        weights[i] = weights[i] - nabla_W[i] * (eta / miniBatchSize);
-        biases[i] = biases[i] - nabla_b[i] * (eta / miniBatchSize);
+        weights[i] = weights[i] - nabla_W[i] * (eta / static_cast<Scalar>(miniBatchSize));
+        biases[i] = biases[i] - nabla_b[i] * (eta / static_cast<Scalar>(miniBatchSize));
+    }
+}
+
+void Network::SGD(std::vector<std::pair<Matrix, Matrix>>& trainingData, size_t epochs, 
+        size_t mini_batch_size, Scalar eta, std::vector<std::pair<Matrix, Matrix>>& testData) {
+    /*
+    place for the comments, BUT I DONT HAVE THE MAIN PART OF RANDOM SHUFFLING - ADDD IT !!!!
+    */
+
+    size_t n = trainingData.size();
+    for (size_t j = 0; j < epochs; ++j) {
+        //random.shuffle(training_data)
+        for (size_t k = 0; k < n; k += mini_batch_size) {
+            std::vector<std::pair<Matrix, Matrix>> miniBatch;
+            miniBatch.reserve(mini_batch_size);
+            for (size_t i = k; i < k + mini_batch_size; ++i) {
+                miniBatch.emplace_back(trainingData[i].first, trainingData[i].second);
+            }
+            update_mini_batch(miniBatch, eta);
+        }
+        std::cout << "Epoch {" << j << "} is completed.\n";
+    }
+
+    if (!testData.size()) {
+        std::cout << "Nothing to test\n";
+    } else {
+        // i need to add there evaluate implementation
+        std::cout << "Not implemented, but will be soon\n";
     }
 }

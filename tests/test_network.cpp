@@ -72,17 +72,34 @@ int main() {
     Matrix x3(784, 1), y3(10, 1);
     auto tmp3 = network3.backprop(x3, y3);
 
-    // need to determenistic check if backprop really works
+    // need to determenistic check if backprop really works correct
 
 
-    // test random update_mini_batch
+    // test random update_mini_batch (just if works, no deterministic result check, which i have to add)
     Network network4({784, 30, 10});
     Matrix x4(784, 1), y4(10, 1);
-    //network3.update_mini_batch(std::vector<std::pair<Matrix, Matrix>>(std::pair<Matrix, Matrix>(x4, y4)), Scalar(3.0));
-    network3.update_mini_batch({{x4, y4}}, Scalar(3.0));
+    std::vector<std::pair<Matrix, Matrix>> mini_batch4 = {{x4, y4}};    
+    network4.update_mini_batch(mini_batch4, Scalar(3.0));
 
 
-    // need to determenistic check if update_mini_batch really works
+    // need to determenistic check if update_mini_batch really works correct
+
+
+    // test random sgd (just if works, no deterministic result check, which i have to add)
+    Network network5({784, 30, 10});
+    Matrix x5_0(784, 1), y5_0(10, 1);
+    Matrix x5_1(784, 1), y5_1(10, 1);
+    std::vector<std::pair<Matrix, Matrix>> trainingData5 = {{x5_0, y5_0}, {x5_1, y5_1}};
+    size_t epochs5 = 30;
+    size_t mini_batch_size5 = 1;
+    Scalar eta5 = 3.0;
+    std::vector<std::pair<Matrix, Matrix>> testData5 = {};
+    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5);
+    testData5 = {{x5_0, y5_0}, {x5_1, y5_1}};
+    network5.SGD(trainingData5, epochs5, mini_batch_size5, eta5, testData5);
+
+    
+    // need to determenistic check if update_mini_batch really works correct
 
     
     printResults();
