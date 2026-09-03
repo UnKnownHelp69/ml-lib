@@ -5,6 +5,8 @@
 #include <random>
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
+
 
 Network::Network(std::vector<int> _sizes) : num_layers(_sizes.size()), sizes(std::move(_sizes)) {
     if (sizes.empty() || sizes.size() == 1) 
@@ -176,25 +178,28 @@ void Network::SGD(std::vector<std::pair<Matrix, Matrix>>& trainingData, size_t e
     /*
     place for the comments, BUT I DONT HAVE THE MAIN PART OF RANDOM SHUFFLING - ADDD IT !!!!
     */
-
     size_t n = trainingData.size();
     for (size_t j = 0; j < epochs; ++j) {
         //random.shuffle(training_data)
         for (size_t k = 0; k < n; k += mini_batch_size) {
             std::vector<std::pair<Matrix, Matrix>> miniBatch;
             miniBatch.reserve(mini_batch_size);
-            for (size_t i = k; i < k + mini_batch_size; ++i) {
+            for (size_t i = k; i < std::min(k + mini_batch_size, n); ++i) {
                 miniBatch.emplace_back(trainingData[i].first, trainingData[i].second);
             }
             update_mini_batch(miniBatch, eta);
         }
         std::cout << "Epoch {" << j << "} is completed.\n";
+
+        if (!testData.empty()) {
+            std::cout << "Epoch " << j << ": " << evaluate(testData) << "/" << testData.size() << "\n";
+        }
     }
 
     if (!testData.size()) {
         std::cout << "Nothing to test\n";
     } else {
-        std::cout << evaluate(testData) << "\\" << testData.size() << " is correct\n";
+        std::cout << evaluate(testData) << "/" << testData.size() << " is correct\n";
     }
 }
 
