@@ -2,4 +2,4 @@
 
 Full hand-written ml-lib in C++.
 
-Currently it is full written for MNIST dataset and evaluted on it.
+Currently it is full written for MNIST dataset and evaluted on it with accuracy around ~0.94
