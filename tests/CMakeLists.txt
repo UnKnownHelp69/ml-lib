@@ -13,3 +13,7 @@ add_test(NAME test_cost_functions COMMAND test_cost_functions)
 add_executable(test_activation_functions test_activation_functions.cpp)
 target_link_libraries(test_activation_functions PRIVATE mllib)
 add_test(NAME test_activation_functions COMMAND test_activation_functions)
+
+add_executable(test_mnist_loader test_mnist_loader.cpp)
+target_link_libraries(test_mnist_loader PRIVATE mllib)
+add_test(NAME test_mnist_loader COMMAND test_mnist_loader)

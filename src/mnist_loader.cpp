@@ -21,11 +21,10 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
 
     if (!trainFile.is_open()) // train file have to exists
         throw std::invalid_argument("The chosen train file does not exist: " + trainPath + '\n');
-    if (testPath != "" && !testFile.is_open()) // test file may not exists
+    if (!testFile.is_open()) // test file may not exists
         throw std::invalid_argument("The chosen test file does not exist: " + testPath + '\n');
 
     while (std::getline(trainFile, line)) {
-        //std::cout << line << "\n";
         std::vector<Scalar> dataRow;
         bool fndAns = false; int ans = 0;
         std::string nowNumString = "";
@@ -39,6 +38,8 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
                     fndAns = true;
                 } else {
                     int tmp = std::stoi(nowNumString);
+                    if (std::abs(tmp) > 255) 
+                        throw std::runtime_error("The numbers have to be inside the diapason of [-255; 255].");
                     dataRow.push_back(static_cast<Scalar>(tmp) / 255.0);
                 }
                 nowNumString = "";
@@ -54,12 +55,11 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
                 fndAns = true;
             } else {
                 int tmp = std::stoi(nowNumString);
+                if (std::abs(tmp) > 255) 
+                    throw std::runtime_error("The numbers have to be inside the diapason of [-255; 255].");
                 dataRow.push_back(static_cast<Scalar>(tmp) / 255.0);
             }
         }
-
-        //std::cout << dataRow.size() << " " << ans << "\n\n\n";
-        //for (auto& c : dataRow) std::cout << c << ","; std::cout << "\n";
 
         if (dataRow.size() != 784)
             throw std::runtime_error("Mnist row train input is not 784 numbers.\n");
@@ -68,8 +68,6 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
         Matrix x(784, 1, dataRow);
         tmpForDistrData.push_back({x, y});
     }
-
-    //std::cout << "GOING TO SPLIT\n";
 
     size_t allLen = tmpForDistrData.size();
     size_t trainingLen = static_cast<size_t>(std::ceil(static_cast<double>(allLen) * 0.8));
@@ -96,6 +94,8 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
                     fndAns = true;
                 } else {
                     int tmp = std::stoi(nowNumString);
+                    if (std::abs(tmp) > 255) 
+                        throw std::runtime_error("The numbers have to be inside the diapason of [-255; 255].");
                     dataRow.push_back(static_cast<Scalar>(tmp) / 255.0);
                 }
                 nowNumString = "";
@@ -111,6 +111,8 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
                 fndAns = true;
             } else {
                 int tmp = std::stoi(nowNumString);
+                if (std::abs(tmp) > 255) 
+                    throw std::runtime_error("The numbers have to be inside the diapason of [-255; 255].");
                 dataRow.push_back(static_cast<Scalar>(tmp) / 255.0);
             }
         }
@@ -121,7 +123,6 @@ std::array<std::vector<std::pair<Matrix, Matrix>>, 3> MnistLoader::load_data_wra
         Matrix y(10, 1); y.zeros(); y(ans, 0) = 1;
         Matrix x(784, 1, dataRow);
         test_data.push_back({x, y});
-        // break; // to test only one run uncomment
     }
 
     return {training_data, validation_data, test_data};
