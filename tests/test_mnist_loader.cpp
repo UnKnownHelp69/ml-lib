@@ -18,8 +18,8 @@ int main() {
 
     // check errors throwing
     std::string failPath1 = "../../tests/MNIST/mnist_fail1.csv";
-    std::string failPath2 = "../../tests/MNIST/mmnist_fail2.csv";
-    std::string failPath3 = "../../tests/MNIST/mmnist_fail3.csv";
+    std::string failPath2 = "../../tests/MNIST/mnist_fail2.csv";
+    std::string failPath3 = "../../tests/MNIST/mnist_fail3.csv";
 
     MnistLoader mnistLoader1(failPath1, testPath);
     MnistLoader mnistLoader2(failPath2, testPath);
