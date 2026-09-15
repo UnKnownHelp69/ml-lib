@@ -14,7 +14,7 @@ Matrix Matrix::operator-(const Matrix& addedMatrix) const {
         throw std::invalid_argument("Invalid matrix sizes while subtracking");
 
     std::vector<Scalar> newData(rows * columns);    
-    auto refAddedMatrix = addedMatrix.getRefDataRow();
+    auto& refAddedMatrix = addedMatrix.getRefDataRow();
 
     #pragma omp parallel for // may be later add if(rows * columns > trashHoldForHardware)
     for (size_t i = 0; i < rows * columns; ++i) 
@@ -32,7 +32,7 @@ Matrix Matrix::operator+(const Matrix& addedMatrix) const {
         throw std::invalid_argument("Invalid matrix sizes while adding");
 
     std::vector<Scalar> newData(rows * columns);    
-    auto refAddedMatrix = addedMatrix.getRefDataRow();
+    auto& refAddedMatrix = addedMatrix.getRefDataRow();
 
     #pragma omp parallel for // may be later add if(totalSize > trashHolfForHardware)
     for (size_t i = 0; i < rows * columns; ++i) 
@@ -101,7 +101,7 @@ Matrix& Matrix::operator=(const Matrix& rightMatrix) {
     rows = rightMatrix.getRows();
     columns = rightMatrix.getColumns();
 
-    const auto& rightDataRow = rightMatrix.getRefDataRow();
+    auto& rightDataRow = rightMatrix.getRefDataRow();
     dataRow = rightDataRow;
     return *this;
 }

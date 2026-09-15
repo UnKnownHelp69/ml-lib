@@ -17,9 +17,9 @@ int main() {
     CHECK(test_data.size() == 10000);
 
     // check errors throwing
-    std::string failPath1 = "../../MNIST/mnist_fail1.csv";
-    std::string failPath2 = "../../MNIST/mnist_fail2.csv";
-    std::string failPath3 = "../../MNIST/mnist_fail3.csv";
+    std::string failPath1 = "../../tests/MNIST/mnist_fail1.csv";
+    std::string failPath2 = "../../tests/MNIST/mmnist_fail2.csv";
+    std::string failPath3 = "../../tests/MNIST/mmnist_fail3.csv";
 
     MnistLoader mnistLoader1(failPath1, testPath);
     MnistLoader mnistLoader2(failPath2, testPath);
@@ -31,7 +31,7 @@ int main() {
 
     // chech the invalid paths
     std::string failPath4 = "";
-    std::string failPath5 = "../../MNIST/bam.csv";
+    std::string failPath5 = "../../tests/bam.csv";
 
     CHECK_THROWS_AS(MnistLoader mnistLoader4(failPath4, testPath), std::invalid_argument);
     CHECK_THROWS_AS(MnistLoader mnistLoader5(trainPath, failPath4), std::invalid_argument);
